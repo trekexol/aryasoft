@@ -68,8 +68,6 @@ class BalanceGeneralController extends Controller
         $datenow = $date->format('Y-m-d'); 
         $period = $date->format('Y'); 
         $detail_old = DetailVoucher::on(Auth::user()->database_name)->orderBy('created_at','asc')->first();
-        
-         
 
 
         if(isset($date_begin)){

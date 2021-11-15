@@ -27,27 +27,7 @@ class Report2Controller extends Controller
 {
    
 
-    public function index_ingresos()
-    {
-        
-        $user       =   auth()->user();
-        $users_role =   $user->role_id;
-        if($users_role == '1'){
-            $date = Carbon::now();
-            $datenow = $date->format('Y-m-d');    
-            $detail_old = DetailVoucher::on(Auth::user()->database_name)->orderBy('created_at','asc')->first();
-            $datebeginyear = $date->firstOfYear()->format('Y-m-d');
-            
-            $coin = 'bolivares';
-
-        }elseif($users_role == '2'){
-            return view('admin.index');
-        }
-
-        return view('admin.reports.index_ingresos_egresos',compact('coin','datebeginyear','datenow','detail_old'));
-      
-    }
-    
+   
     public function index_accounts_receivable($typeperson,$id_client_or_vendor = null)
     {
         if($this->userAccess->validate_user_access($this->modulo)){
@@ -314,17 +294,6 @@ class Report2Controller extends Controller
 
    
 
-    public function store_ingresos(Request $request)
-    {
-        
-        $date_begin = request('date_begin');
-        $date_end = request('date_end');
-        $level = request('level');
-        $coin = request('coin');
-        
-        
-        return view('admin.reports.index_ingresos_egresos',compact('date_begin','date_end','level','coin'));
-    }
 
 
     public function store_accounts_receivable(Request $request)
@@ -654,79 +623,7 @@ class Report2Controller extends Controller
     }
 
 
-    function balance_ingresos_pdf($coin = null,$date_begin = null,$date_end = null,$level = null){
-      
-        $pdf = App::make('dompdf.wrapper');
-        $utilidad = null;
-        $islr = null;
-        
-        $date = Carbon::now();
-        $datenow = $date->format('Y-m-d'); 
-        $period = $date->format('Y'); 
-        $detail_old = DetailVoucher::on(Auth::user()->database_name)->orderBy('created_at','asc')->first();
-
-        if(isset($date_begin)){
-            $from = $date_begin;
-        }else{
-            $from = $detail_old->created_at->format('Y-m-d');
-        }
-        if(isset($date_end)){
-            $to = $date_end;
-        }else{
-            $to = $datenow;
-        }
-        if(isset($level)){
-            
-        }else{
-            $level = 5;
-        }
-
-        if(isset($coin) && ($coin == "bolivares")){
-            $accounts_all = $this->calculation($from,$to);
-        }else{
-            $accounts_all = $this->calculation_dolar("dolares");
-        }
-        
-        foreach($accounts_all as $account){
-            if(($account->code_one == 3) && ($account->code_two == 2) && ($account->code_three == 1) && ($account->code_four == 1) && ($account->code_five == 1)){
-                 
-                $utilidad = ($account->debe - $account->haber) * -1;
-                
-            }
-             if(($account->code_one == 2) && ($account->code_two == 1) && ($account->code_three == 3) && ($account->code_four == 1) && ($account->code_five == 8)){
-                 
-                $islr = ($account->debe - $account->haber) * -1;
-                
-            }
-        }
-        
-       
-        $accounts = $accounts_all->filter(function($account)
-        {
-             
-            if($account->code_one >= 4){
-                $total = $account->debe - $account->haber;
-                if ($total != 0) {
-                    $account->balance = 0;
-                    $account->balance_previus = 0;
-                    return $account;
-                }
-            }
-            
-           
-            
-        });
-        
-        
-        
-        $foto = auth()->user()->company->foto_company ?? '';
-        $code_rif = auth()->user()->company->code_rif ?? '';
-        
-
-        $pdf = $pdf->loadView('admin.reports.ingresos_egresos',compact('islr','utilidad','foto','code_rif','coin','datenow','accounts','level','detail_old','date_begin','date_end'));
-        return $pdf->stream();
-                 
-    }
+ 
 
     function accounts_pdf($coin,$level,$date_begin = null,$date_end = null)
     {
