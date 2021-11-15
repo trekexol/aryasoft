@@ -282,6 +282,19 @@
             </div>
         </li>
         <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseHistorial"
+                aria-expanded="true" aria-controls="collapseHistorial">
+                <i class="fas fa-fw fa-archive" ></i>
+                <span>Historial</span>
+            </a>
+            <div id="collapseHistorial" class="collapse" aria-labelledby="headingHistorial" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+    
+                    <a class="collapse-item" href="{{ route('historial_quotation')}}" > <i class="fas fa-archive fa-sm fa-fw mr-2 text-black-400"></i><strong>Historial Cotización</strong></a>
+    
+            </div>
+        </li>
+        <li class="nav-item">
             <a class="nav-link" href="{{ route('inventories')}}">
                 <i class="fas fa-fw fa-boxes" ></i>
                 <span>Inventario</span></a>

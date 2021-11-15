@@ -939,3 +939,9 @@ Route::group(["prefix"=>'exportexpense'],function(){
     Route::post('retencionislrxml','ExportExpenseController@islrXml')->name('exportexpense.islrXml');
     Route::post('retencionivaexcel','ExportExpenseController@ivaExcel')->name('exportexpense.ivaExcel');
 });
+
+Route::group(["prefix"=>'historialquotation'],function(){
+    Route::get('index','Historial\HistorialQuotationController@index')->name('historial_quotation');
+    Route::post('store','Historial\HistorialQuotationController@store')->name('historial_quotation.store');
+    Route::get('pdf','Historial\HistorialQuotationController@pdf')->name('historial_quotation.pdf');
+});
