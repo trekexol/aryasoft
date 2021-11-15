@@ -722,13 +722,7 @@ Route::group(["prefix"=>'pdfnomina'],function(){
 
  });
 
- Route::group(["prefix"=>'balancegenerals'],function(){
-    Route::get('balancegeneral','Report2Controller@index')->name('balancegenerals');
-    Route::post('store','Report2Controller@store')->name('balancegenerals.store');
-    Route::get('balancepdf/{date_begin?}/{date_end?}/{level?}/{coin?}','Report2Controller@balance_pdf')->name('balancegenerals.balance_pdf');
-
-});
-
+ 
 Route::group(["prefix"=>'twosubsegments'],function(){
     Route::get('/','TwoSubSegmentController@index')->name('twosubsegments');
     Route::get('register','TwoSubSegmentController@create')->name('twosubsegments.create');
@@ -757,12 +751,7 @@ Route::group(["prefix"=>'threesubsegments'],function(){
 
 });
 
-Route::group(["prefix"=>'balanceingresos'],function(){
-    Route::get('balance','Report2Controller@index_ingresos')->name('balanceingresos');
-    Route::post('store','Report2Controller@store_ingresos')->name('balanceingresos.store');
-    Route::get('balancepdf/{coin?}/{date_begin?}/{date_end?}/{level?}','Report2Controller@balance_ingresos_pdf')->name('balanceingresos.balance_pdf');
 
-});
 
 Route::group(["prefix"=>'daily_listing'],function(){
     Route::get('index','DailyListingController@index')->name('daily_listing');
@@ -773,7 +762,16 @@ Route::group(["prefix"=>'daily_listing'],function(){
 });
 
 
-
+Route::group(["prefix"=>'balancegenerals'],function(){
+    Route::get('balancegeneral','Reports\BalanceGeneralController@index')->name('balancegenerals');
+    Route::post('store','Reports\BalanceGeneralController@store')->name('balancegenerals.store');
+    Route::get('balancepdf/{date_begin?}/{date_end?}/{level?}/{coin?}','Reports\BalanceGeneralController@balance_pdf')->name('balancegenerals.balance_pdf');
+});
+Route::group(["prefix"=>'balanceingresos'],function(){
+    Route::get('balance','Reports\BalanceIngresosController@index_ingresos')->name('balanceingresos');
+    Route::post('store','Reports\BalanceIngresosController@store_ingresos')->name('balanceingresos.store');
+    Route::get('balancepdf/{coin?}/{date_begin?}/{date_end?}/{level?}','Reports\BalanceIngresosController@balance_ingresos_pdf')->name('balanceingresos.balance_pdf');
+});
 
 Route::group(["prefix"=>'reports'],function(){
     Route::get('accountsreceivable/{typeperson}/{id_client?}','Report2Controller@index_accounts_receivable')->name('reports.accounts_receivable');

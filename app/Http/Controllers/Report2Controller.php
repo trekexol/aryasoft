@@ -25,38 +25,7 @@ use Illuminate\Support\Facades\Auth;
 
 class Report2Controller extends Controller
 {
-    public $userAccess;
-    public $modulo = 'Cotizacion';
-
- 
-    public function __construct(){
-
-       $this->middleware('auth');
-       $this->userAccess = new UserAccessController();
-   }
-
-    public function index()
-    {
-        
-        
-        $user       =   auth()->user();
-        $users_role =   $user->role_id;
-        if($users_role == '1'){
-            $date = Carbon::now();
-            $datenow = $date->format('Y-m-d');    
-            $detail_old = DetailVoucher::on(Auth::user()->database_name)->orderBy('created_at','asc')->first();
-            $date_begin = $detail_old;
-            $datebeginyear = $date->firstOfYear()->format('Y-m-d');
-
-        }elseif($users_role == '2'){
-            return view('admin.index');
-        }
-
-        
-    
-        return view('admin.reports.index_balance_general',compact('datebeginyear','datenow','detail_old','date_begin'));
-      
-    }
+   
 
     public function index_ingresos()
     {
@@ -343,17 +312,7 @@ class Report2Controller extends Controller
 
     }
 
-    public function store(Request $request)
-    {
-        
-        $date_begin = request('date_begin');
-        $date_end = request('date_end');
-        $level = request('level');
-        $coin = request('coin');
-        
-        
-        return view('admin.reports.index_balance_general',compact('date_begin','date_end','level','coin'));
-    }
+   
 
     public function store_ingresos(Request $request)
     {
@@ -571,66 +530,7 @@ class Report2Controller extends Controller
     }
 
 
-    function balance_pdf($coin = null,$date_begin = null,$date_end = null,$level = null)
-    {
-        
-        $pdf = App::make('dompdf.wrapper');
-
-        
-        $date = Carbon::now();
-        $datenow = $date->format('Y-m-d'); 
-        $period = $date->format('Y'); 
-        $detail_old = DetailVoucher::on(Auth::user()->database_name)->orderBy('created_at','asc')->first();
-        
-         
-
-
-        if(isset($date_begin)){
-            $from = $date_begin;
-        }else{
-            $from = $detail_old->created_at->format('Y-m-d');
-            
-        }
-        if(isset($date_end)){
-            $to = $date_end;
-        }else{
-            $to = $datenow;
-        }
-        if(isset($level)){
-            
-        }else{
-            $level = 5;
-        }
-
-        
-
-        if(isset($coin) && ($coin == "bolivares")){
-            $accounts_all = $this->calculation($from,$to);
-        }else{
-            $accounts_all = $this->calculation_dolar("dolares");
-        }
-      
-
-        $accounts = $accounts_all->filter(function($account)
-        {
-            if($account->code_one <= 3){
-                $total = $account->balance_previus + $account->debe - $account->haber;
-                if ($total != 0) {
-                    return $account;
-                }
-            }
-            
-        });
-
-        
-        $foto = auth()->user()->company->foto_company ?? '';
-        $code_rif = auth()->user()->company->code_rif ?? '';
-
-        
-        $pdf = $pdf->loadView('admin.reports.balance_general',compact('foto','code_rif','coin','datenow','accounts','level','detail_old','date_begin','date_end'));
-        return $pdf->stream();
-                 
-    }
+   
 
     function debtstopay_pdf($coin,$date_end,$id_provider = null)
     {
