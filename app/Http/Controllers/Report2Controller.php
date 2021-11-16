@@ -13,6 +13,7 @@ use App\Company;
 use App\DetailVoucher;
 use App\Employee;
 use App\ExpensesAndPurchase;
+use App\ExpensesDetail;
 use App\Http\Controllers\UserAccess\UserAccessController;
 use App\Product;
 use App\Provider;
@@ -829,13 +830,22 @@ class Report2Controller extends Controller
                                         [$date_begin, $date_end])
                                     ->orderBy('date','desc')->get();
 
+        $total_exento = ExpensesDetail::on(Auth::user()->database_name)
+                                    ->where('exento','1')
+                                    ->whereRaw(
+                                        "(DATE_FORMAT(created_at, '%Y-%m-%d') >= ? AND DATE_FORMAT(created_at, '%Y-%m-%d') <= ?)", 
+                                        [$date_begin, $date_end])
+                                    ->select(DB::connection(Auth::user()->database_name)->raw('SUM(price*amount) as total'))->get();
+
+        $total_exento = $total_exento[0]->total;
+
         $date_begin = Carbon::parse($date_begin);
         $date_begin = $date_begin->format('d-m-Y');
         $date_end = Carbon::parse($date_end);
         $date_end = $date_end->format('d-m-Y');
 
 
-        $pdf = $pdf->loadView('admin.reports.purchases_books',compact('coin','expenses','datenow','date_begin','date_end'))->setPaper('a4', 'landscape');
+        $pdf = $pdf->loadView('admin.reports.purchases_books',compact('coin','expenses','datenow','date_begin','date_end','total_exento'))->setPaper('a4', 'landscape');
         return $pdf->stream();
                  
     }

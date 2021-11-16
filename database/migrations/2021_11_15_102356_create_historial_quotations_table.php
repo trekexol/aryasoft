@@ -23,8 +23,6 @@ class CreateHistorialQuotationsTable extends Migration
 
             $table->foreign('id_quotation')->references('id')->on('quotations');
             $table->foreign('id_user')->references('id')->on('users');
-            $table->foreign('id_quotation')->references('id')->on('quotations');
-            $table->foreign('id_quotation')->references('id')->on('quotations');
             $table->timestamps();
         });
     }

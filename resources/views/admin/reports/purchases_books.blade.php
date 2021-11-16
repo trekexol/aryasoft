@@ -35,7 +35,7 @@
   <h4 style="color: black; text-align: center">LIBRO DE COMPRAS</h4>
   <h5 style="color: black; text-align: center">Fecha de Emisión: {{ $datenow ?? '' }} / Fecha desde: {{ $date_begin ?? '' }} Fecha Hasta: {{ $date_end ?? '' }}</h5>
    
- 
+   
 <table style="width: 100%;">
   <tr>
     <th style="text-align: center; ">Nº</th>
@@ -51,7 +51,18 @@
     <th style="text-align: center; ">IVA</th>
     <th style="text-align: center; ">Total</th>
   </tr> 
+  <?php
+        $total_base_imponible = 0;
+  ?>
   @foreach ($expenses as $expense)
+    <?php
+      if(isset($coin) && $coin == 'bolivares'){
+        $total_base_imponible += $expense->base_imponible;
+      }else{
+        $total_base_imponible += $expense->base_imponible / ($expense->rate ?? 1);
+      }
+        
+    ?>
     <tr>
       
       <td style="text-align: center; ">{{ $expense->id ?? ''}}</td>
@@ -83,6 +94,8 @@
 
   
 </table>
+
+<h5 style="color: black; text-align: center">Total Exento: {{ number_format(($total_exento ?? 0), 2, ',', '.') }} / Total Compras y Créditos: {{ number_format(($total_base_imponible ?? 0), 2, ',', '.') }} </h5>
 
 </body>
 </html>
