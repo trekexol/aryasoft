@@ -8,6 +8,7 @@ use App\DetailVoucher;
 use App\HeaderVoucher;
 use App\Inventory;
 use App\Client;
+use App\Http\Controllers\Historial\HistorialQuotationController;
 use Illuminate\Http\Request;
 
 use App\Quotation;
@@ -512,8 +513,11 @@ class FacturarController extends Controller
             }
         }
         
-       
+        $historial_quotation = new HistorialQuotationController();
 
+        $historial_quotation->registerAction($quotation,"quotation","Cotizactión convertida a Factura a Crédito");
+            
+       
         return redirect('quotations/facturado/'.$quotation->id.'/'.$quotation->coin.'')->withSuccess('Factura Guardada con Exito!');
     }
 
@@ -1440,9 +1444,12 @@ class FacturarController extends Controller
                 $var->created_at = $date_payment;
                 $var->save();
 
-                    $this->add_pay_movement($bcv,$payment_type,$header_voucher->id,$var->id_account,$quotation->id,$user_id,$var->amount,0);
-                
+                $this->add_pay_movement($bcv,$payment_type,$header_voucher->id,$var->id_account,$quotation->id,$user_id,$var->amount,0);
+            
+                $historial_quotation = new HistorialQuotationController();
 
+                $historial_quotation->registerAction($var,"quotation_payment","Registro de Pago");
+                        
                 //LE PONEMOS STATUS C, DE COBRADO
                 $quotation->status = "C";
             }
@@ -1451,7 +1458,9 @@ class FacturarController extends Controller
                 $var2->created_at = $date_payment;
                 $var2->save();
 
-                
+                $historial_quotation = new HistorialQuotationController();
+
+                $historial_quotation->registerAction($var2,"quotation_payment","Registro de Pago");
                
                 $this->add_pay_movement($bcv,$payment_type2,$header_voucher->id,$var2->id_account,$quotation->id,$user_id,$var2->amount,0);
                 
@@ -1461,7 +1470,9 @@ class FacturarController extends Controller
                 $var3->created_at = $date_payment;
                 $var3->save();
 
-                
+                $historial_quotation = new HistorialQuotationController();
+
+                $historial_quotation->registerAction($var3,"quotation_payment","Registro de Pago");
 
                 $this->add_pay_movement($bcv,$payment_type3,$header_voucher->id,$var3->id_account,$quotation->id,$user_id,$var3->amount,0);
             
@@ -1471,12 +1482,20 @@ class FacturarController extends Controller
                 $var4->created_at = $date_payment;
                 $var4->save();
 
+                $historial_quotation = new HistorialQuotationController();
+
+                $historial_quotation->registerAction($var4,"quotation_payment","Registro de Pago");
+
                 $this->add_pay_movement($bcv,$payment_type4,$header_voucher->id,$var4->id_account,$quotation->id,$user_id,$var4->amount,0);
             
             }
             if($validate_boolean5 == true){
                 $var5->created_at = $date_payment;
                 $var5->save();
+
+                $historial_quotation = new HistorialQuotationController();
+
+                $historial_quotation->registerAction($var5,"quotation_payment","Registro de Pago");
 
                 $this->add_pay_movement($bcv,$payment_type5,$header_voucher->id,$var5->id_account,$quotation->id,$user_id,$var5->amount,0);
              
@@ -1485,12 +1504,20 @@ class FacturarController extends Controller
                 $var6->created_at = $date_payment;
                 $var6->save();
 
+                $historial_quotation = new HistorialQuotationController();
+
+                $historial_quotation->registerAction($var6,"quotation_payment","Registro de Pago");
+
                 $this->add_pay_movement($bcv,$payment_type6,$header_voucher->id,$var6->id_account,$quotation->id,$user_id,$var6->amount,0);
             
             }
             if($validate_boolean7 == true){
                 $var7->created_at = $date_payment;
                 $var7->save();
+
+                $historial_quotation = new HistorialQuotationController();
+
+                $historial_quotation->registerAction($var7,"quotation_payment","Registro de Pago");
 
                 $this->add_pay_movement($bcv,$payment_type7,$header_voucher->id,$var7->id_account,$quotation->id,$user_id,$var7->amount,0);
             
@@ -1691,6 +1718,10 @@ class FacturarController extends Controller
             $global->procesar_anticipos($quotation,$sin_formato_total_pay);
             
             /*------------------------------------------------- */
+
+            $historial_quotation = new HistorialQuotationController();
+
+            $historial_quotation->registerAction($var,"quotation","Registro de Factura Realizada");
 
             return redirect('quotations/facturado/'.$quotation->id.'/'.$coin.'')->withSuccess('Factura Guardada con Exito!');
 

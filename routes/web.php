@@ -941,7 +941,7 @@ Route::group(["prefix"=>'exportexpense'],function(){
 });
 
 Route::group(["prefix"=>'historialquotation'],function(){
-    Route::get('index','Historial\HistorialQuotationController@index')->name('historial_quotation');
+    Route::get('index/{id_user?}','Historial\HistorialQuotationController@index')->name('historial_quotation');
     Route::post('store','Historial\HistorialQuotationController@store')->name('historial_quotation.store');
-    Route::get('pdf','Historial\HistorialQuotationController@pdf')->name('historial_quotation.pdf');
+    Route::get('pdf/{date_begin}/{date_end}/{id_user?}','Historial\HistorialQuotationController@pdf')->name('historial_quotation.pdf');
 });

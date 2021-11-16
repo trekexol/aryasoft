@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class QuotationProduct extends Model
 {
     public function inventories(){
-        return $this->belongsTo('App\Permission\Models\Inventory','id_inventory');
+        return $this->belongsTo('App\Inventory','id_inventory');
     }
     public function product() {
         return $this->hasMany('App\Product');   

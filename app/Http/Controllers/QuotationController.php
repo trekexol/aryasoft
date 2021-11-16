@@ -7,6 +7,8 @@ use App\Client;
 use App\Company;
 use App\DetailVoucher;
 use App\Exports\ProductsExport;
+use App\HistorialQuotation;
+use App\Http\Controllers\Historial\HistorialQuotationController;
 use App\Http\Controllers\UserAccess\UserAccessController;
 use App\Inventory;
 use App\Multipayment;
@@ -33,6 +35,7 @@ class QuotationController extends Controller
 
        $this->middleware('auth');
        $this->userAccess = new UserAccessController();
+      
    }
 
    public function index()
@@ -429,7 +432,13 @@ class QuotationController extends Controller
                 $var->status =  1;
             
                 $var->save();
-        
+
+
+                $historial_quotation = new HistorialQuotationController();
+
+                $historial_quotation->registerAction($var,"quotation","Creó Cotización");
+
+
                 return redirect('quotations/register/'.$var->id.'/bolivares');
 
             
@@ -522,6 +531,11 @@ class QuotationController extends Controller
         $var->status =  1;
     
         $var->save();
+
+        $historial_quotation = new HistorialQuotationController();
+
+        $historial_quotation->registerAction($var,"quotation_product","Registró un Producto");
+
 
         return redirect('quotations/register/'.$var->id_quotation.'/'.$coin.'')->withSuccess('Producto agregado Exitosamente!');
     }
@@ -669,6 +683,11 @@ class QuotationController extends Controller
     
         $var->save();
 
+        $historial_quotation = new HistorialQuotationController();
+
+        $historial_quotation->registerAction($var,"quotation","Actualizó la Cotización");
+
+
         return redirect('/quotations')->withSuccess('Actualizacion Exitosa!');
         }
 
@@ -690,6 +709,9 @@ class QuotationController extends Controller
             
         
             $var = QuotationProduct::on(Auth::user()->database_name)->findOrFail($id);
+
+            $price_old = $var->price;
+            $amount_old = $var->amount;
 
             $sin_formato_price = str_replace(',', '.', str_replace('.', '', request('price')));
             $sin_formato_rate = str_replace(',', '.', str_replace('.', '', request('rate')));
@@ -732,6 +754,11 @@ class QuotationController extends Controller
 
         
             $var->save();
+
+            $historial_quotation = new HistorialQuotationController();
+
+            $historial_quotation->registerAction($var,"quotation_product","Actualizó el Producto: ".$var->inventories['code']."/ 
+            Precio Viejo: ".number_format($price_old, 2, ',', '.')." Cantidad: ".$amount_old."/ Precio Nuevo: ".number_format($var->price, 2, ',', '.')." Cantidad: ".$var->amount);
         
             return redirect('/quotations/register/'.$var->id_quotation.'/'.$coin.'')->withSuccess('Actualizacion Exitosa!');
         
@@ -742,6 +769,7 @@ class QuotationController extends Controller
         { 
             $sin_formato_rate = str_replace(',', '.', str_replace('.', '', $rate));
 
+            $quotation = Quotation::on(Auth::user()->database_name)->find($id_quotation);
 
             QuotationProduct::on(Auth::user()->database_name)->where('id_quotation',$id_quotation)
                                     ->update(['rate' => $sin_formato_rate]);
@@ -750,7 +778,9 @@ class QuotationController extends Controller
             Quotation::on(Auth::user()->database_name)->where('id',$id_quotation)
                                     ->update(['bcv' => $sin_formato_rate]);
 
-            
+            $historial_quotation = new HistorialQuotationController();
+
+            $historial_quotation->registerAction($quotation,"quotation","Actualizó la tasa: ".$rate." / tasa antigua: ".number_format($quotation->bcv, 2, ',', '.'));
             
             return redirect('/quotations/register/'.$id_quotation.'/'.$coin.'')->withSuccess('Actualizacion de Tasa Exitosa!');
         
@@ -781,6 +811,10 @@ class QuotationController extends Controller
             $quotation_product->delete(); 
         }
 
+        $historial_quotation = new HistorialQuotationController();
+
+        $historial_quotation->registerAction($quotation_product,"quotation_product","Se eliminó un Producto");
+
         return redirect('/quotations/register/'.request('id_quotation_modal').'/'.request('coin_modal').'')->withDanger('Eliminacion exitosa!!');
         
     }
@@ -793,9 +827,13 @@ class QuotationController extends Controller
         $global = new GlobalController();
         $global->deleteAllProducts($quotation->id);
 
-        Anticipo::on(Auth::user()->database_name)->where('id_quotation',$quotation->id)->delete();
+        //Anticipo::on(Auth::user()->database_name)->where('id_quotation',$quotation->id)->delete();
 
         $quotation->delete(); 
+
+        $historial_quotation = new HistorialQuotationController();
+
+        $historial_quotation->registerAction($quotation,"quotation","Se eliminó la cotización");
 
         return redirect('/quotations')->withDanger('Eliminacion exitosa!!');
         
@@ -825,6 +863,10 @@ class QuotationController extends Controller
     
                 $quotation->status = 'X';
                 $quotation->save();
+
+                $historial_quotation = new HistorialQuotationController();
+
+                $historial_quotation->registerAction($quotation,"quotation","Se Reversó la Factura");
             }
         }else{
             return redirect('/quotations/facturado/'.$quotation->id.'/bolivares/'.$exist_multipayment->id_header.'');
@@ -838,6 +880,8 @@ class QuotationController extends Controller
 
         
         if(isset($id_header)){
+            $quotation = Quotation::on(Auth::user()->database_name)->find($id_quotation);
+
             //aqui reversamos todo el movimiento del multipago
             DB::connection(Auth::user()->database_name)->table('detail_vouchers')
             ->join('header_vouchers', 'header_vouchers.id','=','detail_vouchers.id_header_voucher')
@@ -870,6 +914,15 @@ class QuotationController extends Controller
             ->where('id_header',$id_header)->update(['quotations.status' => 'X']);
 
             Multipayment::on(Auth::user()->database_name)->where('id_header',$id_header)->delete();
+
+
+
+            $historial_quotation = new HistorialQuotationController();
+
+            $historial_quotation->registerAction($quotation,"quotation","Se Reversó MultiFactura");
+
+
+
 
             return redirect('invoices')->withSuccess('Reverso de Facturas Multipago Exitosa!');
         }else{
