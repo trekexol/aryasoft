@@ -154,7 +154,7 @@
   </tr> 
   <tr>
     <th style="text-align: right; font-weight: normal; width: 79%; border-bottom-color: white;">Ventas Exentas</th>
-    <th style="text-align: right; font-weight: normal; width: 21%;"><?php echo e(number_format($quotation->ventas_exentas / ($bcv ?? 1), 2, ',', '.')); ?></th>
+    <th style="text-align: right; font-weight: normal; width: 21%;"><?php echo e(number_format(($retiene_iva ?? 0) / ($bcv ?? 1), 2, ',', '.')); ?></th>
   </tr> 
   <tr>
     <th style="text-align: right; font-weight: normal; width: 79%; border-bottom-color: white;">I.V.A.<?php echo e($quotation->iva_percentage); ?>%</th>

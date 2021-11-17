@@ -5,11 +5,10 @@
     <div class="row justify-content-center">
         <div class="col-sm-12">
             <div class="card">
-                <form method="POST" action="{{ route('reports.store_accounts_receivable') }}">
+                <form method="POST" action="{{ route('historial_quotation.store') }}">
                     @csrf
 
-                <input type="hidden" name="id_client" value="{{$client->id ?? null}}" readonly>
-                <input type="hidden" name="id_vendor" value="{{$vendor->id ?? null}}" readonly>
+                <input type="hidden" name="id_user" value="{{$user->id ?? null}}" readonly>
 
                 <div class="card-header text-center h4">
                         Historial de Cotizaciones

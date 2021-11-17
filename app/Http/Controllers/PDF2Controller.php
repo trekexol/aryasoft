@@ -20,7 +20,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
-class PDFController extends Controller
+class PDF2Controller extends Controller
 {
 
     function imprimirFactura($id_quotation,$coin = null)
@@ -149,7 +149,6 @@ class PDFController extends Controller
     function deliverynote($id_quotation,$coin,$iva,$date)
     {
       
-
         $pdf = App::make('dompdf.wrapper');
     
              $quotation = null;
@@ -224,6 +223,8 @@ class PDFController extends Controller
 
                         $base_imponible += ($var->price * $var->amount_quotation) - $percentage; 
 
+                    }else{
+                        $retiene_iva += ($var->price * $var->amount_quotation) - $percentage; 
                     }
 
                     if($var->retiene_islr_quotation == 1){
@@ -239,6 +240,7 @@ class PDFController extends Controller
                 $quotation->base_imponible = $base_imponible;
                 $quotation->amount_iva = $base_imponible * $quotation->iva_percentage / 100;
                 $quotation->amount_with_iva = $quotation->amount + $quotation->amount_iva;
+                
                 $quotation->iva_percentage = $iva;
                 $quotation->date_delivery_note = $date;
                 $quotation->save();
@@ -262,7 +264,6 @@ class PDFController extends Controller
                     $coin = 'bolivares';
                 }
 
-                dd($coin);
                 /*Aqui revisamos el porcentaje de retencion de iva que tiene el cliente, para aplicarlo a productos que retengan iva */
                 $client = Client::on(Auth::user()->database_name)->find($quotation->id_client);
 
@@ -270,7 +271,7 @@ class PDFController extends Controller
                 $company = Company::on(Auth::user()->database_name)->find(1);
                 
                 $pdf = $pdf->loadView('pdf.deliverynote',compact('quotation','inventories_quotations','bcv','company'
-                                                                ,'total_retiene_iva','total_retiene_islr','coin'));
+                                                                ,'total_retiene_iva','total_retiene_islr','coin','retiene_iva'));
                 return $pdf->stream();
          
             }else{
@@ -491,6 +492,8 @@ class PDFController extends Controller
 
                         $base_imponible += ($var->price * $var->amount_quotation) - $percentage; 
 
+                    }else{
+                        $retiene_iva += ($var->price * $var->amount_quotation) - $percentage; 
                     }
 
                     if($var->retiene_islr_quotation == 1){
@@ -507,7 +510,7 @@ class PDFController extends Controller
                 $quotation->amount_iva = $base_imponible * $quotation->iva_percentage / 100;
                 $quotation->amount_with_iva = $quotation->amount + $quotation->amount_iva;
                 $quotation->iva_percentage = $iva;
-                 $quotation->date_delivery_note = $date;
+                $quotation->date_delivery_note = $date;
                 $quotation->save();
 
 
@@ -536,7 +539,7 @@ class PDFController extends Controller
                 $company = Company::on(Auth::user()->database_name)->find(1);
                 
                 $pdf = $pdf->loadView('pdf.deliverynotemediacarta',compact('quotation','inventories_quotations','bcv','company'
-                                                                ,'total_retiene_iva','total_retiene_islr'));
+                                                                ,'retiene_iva','total_retiene_islr'));
                 return $pdf->stream();
          
             }else{

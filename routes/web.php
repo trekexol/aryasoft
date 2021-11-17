@@ -522,23 +522,23 @@ Route::group(["prefix"=>'invoices'],function(){
  });
 
  Route::group(["prefix"=>'pdf'],function(){
-    Route::get('factura/{id_quotation}/{coin?}','PDFController@imprimirfactura')->name('pdf');
-    Route::get('deliverynote/{id_quotation}/{coin}/{iva}/{date}','PDFController@deliverynote')->name('pdf.deliverynote');
-    Route::get('deliverynotemediacarta/{id_quotation}/{coin}/{iva}/{date}','PDFController@deliverynotemediacarta')->name('pdf.deliverynotemediacarta');
+    Route::get('factura/{id_quotation}/{coin?}','PDF2Controller@imprimirfactura')->name('pdf');
+    Route::get('deliverynote/{id_quotation}/{coin}/{iva}/{date}','PDF2Controller@deliverynote')->name('pdf.deliverynote');
+    Route::get('deliverynotemediacarta/{id_quotation}/{coin}/{iva}/{date}','PDF2Controller@deliverynotemediacarta')->name('pdf.deliverynotemediacarta');
 
-    Route::get('inventory','PDFController@imprimirinventory')->name('pdf.inventory');
+    Route::get('inventory','PDF2Controller@imprimirinventory')->name('pdf.inventory');
 
-    Route::get('facturamedia/{id_quotation}/{coin?}','PDFController@imprimirfactura_media')->name('pdf.media');
+    Route::get('facturamedia/{id_quotation}/{coin?}','PDF2Controller@imprimirfactura_media')->name('pdf.media');
 
-    Route::get('expense/{id_expense}/{coin}','PDFController@imprimirExpense')->name('pdf.expense');
+    Route::get('expense/{id_expense}/{coin}','PDF2Controller@imprimirExpense')->name('pdf.expense');
 
-    Route::get('expensemedia/{id_expense}/{coin}','PDFController@imprimirExpenseMedia')->name('pdf.expense_media');
+    Route::get('expensemedia/{id_expense}/{coin}','PDF2Controller@imprimirExpenseMedia')->name('pdf.expense_media');
 
-    Route::get('previousexercise/{date_begin}/{date_end}','PDFController@print_previousexercise')->name('pdf.previousexercise');
+    Route::get('previousexercise/{date_begin}/{date_end}','PDF2Controller@print_previousexercise')->name('pdf.previousexercise');
 
-    Route::get('deliverynoteexpense/{id_expense}/{coin}/{iva}/{date}','PDFController@deliverynote_expense')->name('pdf.deliverynote_expense');
+    Route::get('deliverynoteexpense/{id_expense}/{coin}/{iva}/{date}','PDF2Controller@deliverynote_expense')->name('pdf.deliverynote_expense');
 
-    Route::get('order/{id_quotation}/{coin}/{iva}/{date}','PDFController@order')->name('pdf.order');
+    Route::get('order/{id_quotation}/{coin}/{iva}/{date}','PDF2Controller@order')->name('pdf.order');
 
 });
 

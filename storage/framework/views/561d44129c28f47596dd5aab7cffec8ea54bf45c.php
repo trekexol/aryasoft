@@ -1,6 +1,3 @@
-
-  
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -117,7 +114,7 @@
 
       $total_less_percentage = (number_format(bcdiv($var->price, '1', 2),2,'.','') * $var->amount_quotation) - $percentage;
 
-      $total_less_percentage = bcdiv($total_less_percentage / ($bcv ?? 1), '1', 2);
+      $total_less_percentage = $total_less_percentage / ($bcv ?? 1);
       ?>
     <tr>
       <th style="text-align: center; font-weight: normal;"><?php echo e($var->code_comercial); ?></th>
@@ -138,9 +135,9 @@
 
   $total_petro = $total / ($bcv ?? 1) / $company->rate_petro;
 
-  $iva = bcdiv($iva / ($bcv ?? 1),'1',2);
+  $iva = $iva / ($bcv ?? 1);
 
-  $total = bcdiv($total / ($bcv ?? 1),'1',2);
+  $total = $total / ($bcv ?? 1);
 ?>
 
 <table style="width: 100%;">
@@ -155,7 +152,7 @@
   </tr> 
   <tr>
     <th style="text-align: right; font-weight: normal; width: 79%; border-bottom-color: white;">Ventas Exentas</th>
-    <th style="text-align: right; font-weight: normal; width: 21%;"><?php echo e(number_format($quotation->ventas_exentas / ($bcv ?? 1), 2, ',', '.')); ?></th>
+    <th style="text-align: right; font-weight: normal; width: 21%;"><?php echo e(number_format(($retiene_iva ?? 0) / ($bcv ?? 1), 2, ',', '.')); ?></th>
   </tr> 
   <tr>
     <th style="text-align: right; font-weight: normal; width: 79%; border-bottom-color: white;">I.V.A.<?php echo e($quotation->iva_percentage); ?>%</th>
@@ -257,8 +254,8 @@
 
       $total_less_percentage = (number_format($var->price,2,'.','') * $var->amount_quotation) - $percentage;
 
-      $total_less_percentage = bcdiv($total_less_percentage / ($bcv ?? 1),'1',2);
-      ?>
+      $total_less_percentage = $total_less_percentage / ($bcv ?? 1);
+            ?>
     <tr>
       <th style="text-align: center; font-weight: normal;"><?php echo e($var->code_comercial); ?></th>
       <th style="text-align: center; font-weight: normal;"><?php echo e($var->description); ?></th>
@@ -278,9 +275,9 @@
 
   $total_petro = $total / ($bcv ?? 1) / $company->rate_petro;
 
-  $iva = bcdiv($iva / ($bcv ?? 1),'1',2);
+  $iva = $iva / ($bcv ?? 1);
 
-  $total = bcdiv($total / ($bcv ?? 1),'1',2);
+  $total = $total / ($bcv ?? 1);
 ?>
 
 <table style="width: 100%;">
@@ -294,7 +291,7 @@
   </tr> 
   <tr>
     <th style="text-align: right; font-weight: normal; width: 79%; border-bottom-color: white;">Ventas Exentas</th>
-    <th style="text-align: right; font-weight: normal; width: 21%;"><?php echo e(number_format($quotation->ventas_exentas / ($bcv ?? 1), 2, ',', '.')); ?></th>
+    <th style="text-align: right; font-weight: normal; width: 21%;"><?php echo e(number_format(($retiene_iva ?? 0) / ($bcv ?? 1), 2, ',', '.')); ?></th>
   </tr> 
   <tr>
     <th style="text-align: right; font-weight: normal; width: 79%; border-bottom-color: white;">I.V.A.<?php echo e($quotation->iva_percentage); ?>%</th>
@@ -396,8 +393,8 @@
 
       $total_less_percentage = (number_format($var->price,2,'.','') * $var->amount_quotation) - $percentage;
 
-      $total_less_percentage = bcdiv($total_less_percentage / ($bcv ?? 1),'1',2);
-      ?>
+      $total_less_percentage = $total_less_percentage / ($bcv ?? 1);
+            ?>
     <tr>
       <th style="text-align: center; font-weight: normal;"><?php echo e($var->code_comercial); ?></th>
       <th style="text-align: center; font-weight: normal;"><?php echo e($var->description); ?></th>
@@ -417,9 +414,9 @@
 
   $total_petro = $total / ($bcv ?? 1) / $company->rate_petro;
 
-  $iva = bcdiv($iva / ($bcv ?? 1),'1',2);
+  $iva = $iva / ($bcv ?? 1);
 
-  $total = bcdiv($total / ($bcv ?? 1),'1',2);
+  $total = $total / ($bcv ?? 1);
 ?>
 
 <table style="width: 100%;">
@@ -433,7 +430,7 @@
   </tr> 
   <tr>
     <th style="text-align: right; font-weight: normal; width: 79%; border-bottom-color: white;">Ventas Exentas</th>
-    <th style="text-align: right; font-weight: normal; width: 21%;"><?php echo e(number_format($quotation->ventas_exentas / ($bcv ?? 1), 2, ',', '.')); ?></th>
+    <th style="text-align: right; font-weight: normal; width: 21%;"><?php echo e(number_format(($retiene_iva ?? 0) / ($bcv ?? 1), 2, ',', '.')); ?></th>
   </tr> 
   <tr>
     <th style="text-align: right; font-weight: normal; width: 79%; border-bottom-color: white;">I.V.A.<?php echo e($quotation->iva_percentage); ?>%</th>

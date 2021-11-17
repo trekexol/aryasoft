@@ -46,7 +46,7 @@ class HistorialQuotationController extends Controller
    {
         $date_begin = request('date_begin');
         $date_end = request('date_end');
-        $user = null;
+        $user = request('id_user');
 
       
         return view('admin.historials.quotations.index_historial_quotation',compact('date_end','user','date_begin'));
@@ -67,12 +67,27 @@ class HistorialQuotationController extends Controller
        }else{
            $date_end = Carbon::parse($date_end)->format('d-m-Y');
 
-           $date_consult = Carbon::parse($date_end)->format('Y-m-d');
+           $date_end_consult = Carbon::parse($date_end)->format('Y-m-d');
        }
+
+       if(empty($date_begin)){
+            $date_begin = $datenow;
+
+            $date_consult = $date->format('Y-m-d'); 
+        }else{
+            $date_begin = Carbon::parse($date_begin)->format('d-m-Y');
+
+            $date_begin_consult = Carbon::parse($date_begin)->format('Y-m-d');
+        }
        
        $period = $date->format('Y'); 
        
-       $historials    = HistorialQuotation::on(Auth::user()->database_name)->orderBy('created_at','desc')->get();
+       $historials    = HistorialQuotation::on(Auth::user()->database_name)
+                                            ->whereRaw(
+                                                "(DATE_FORMAT(created_at, '%Y-%m-%d') >= ? AND DATE_FORMAT(created_at, '%Y-%m-%d') <= ?)", 
+                                                [$date_begin_consult, $date_end_consult])
+                                            ->orderBy('created_at','desc')
+                                            ->get();
        
        $pdf = $pdf->loadView('admin.historials.quotations.historial_quotation_pdf',compact('historials','datenow','date_end'));
        return $pdf->stream();
