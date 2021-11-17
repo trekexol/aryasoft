@@ -152,7 +152,7 @@
     <th style="text-align: right; font-weight: normal; width: 21%;">{{ number_format($quotation->base_imponible / ($bcv ?? 1), 2, ',', '.') }}</th>
   </tr> 
   <tr>
-    <th style="text-align: right; font-weight: normal; width: 79%; border-bottom-color: white;">Ventas Exentas</th>
+    <th style="text-align: right; font-weight: normal; width: 79%; border-bottom-color: white;">Ventas Exentas/{{$coin ?? 'no'}}</th>
     <th style="text-align: right; font-weight: normal; width: 21%;">{{ number_format($quotation->ventas_exentas / ($bcv ?? 1), 2, ',', '.') }}</th>
   </tr> 
   <tr>
