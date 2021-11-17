@@ -262,7 +262,7 @@ class PDFController extends Controller
                     $coin = 'bolivares';
                 }
 
-
+                dd($coin);
                 /*Aqui revisamos el porcentaje de retencion de iva que tiene el cliente, para aplicarlo a productos que retengan iva */
                 $client = Client::on(Auth::user()->database_name)->find($quotation->id_client);
 
