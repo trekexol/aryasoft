@@ -27,15 +27,14 @@ use Illuminate\Support\Facades\Auth;
 class Report2Controller extends Controller
 {
    
-
+    public $modulo = "Reportes";
    
     public function index_accounts_receivable($typeperson,$id_client_or_vendor = null)
     {        
-        $user       =   auth()->user();
-        $users_role =   $user->role_id;
+       
+        $userAccess = new UserAccessController();
 
-
-  
+        if($userAccess->validate_user_access($this->modulo)){
             $date = Carbon::now();
             $datenow = $date->format('Y-m-d');   
             $client = null; 
@@ -53,15 +52,17 @@ class Report2Controller extends Controller
             }
             
             return view('admin.reports.index_accounts_receivable',compact('client','datenow','typeperson','vendor'));
-
+        }else{
+            return redirect('/home')->withDanger('No tiene Acceso al modulo de '.$this->modulo);
+        }
     }
 
     public function index_debtstopay($id_provider = null)
     {
-        $user       =   auth()->user();
-        $users_role =   $user->role_id;
-
-        if($this->userAccess->validate_user_access($this->modulo)){
+      
+        $userAccess = new UserAccessController();
+        
+        if($userAccess->validate_user_access($this->modulo)){
             $date = Carbon::now();
             $datenow = $date->format('Y-m-d');   
             $provider = null; 
