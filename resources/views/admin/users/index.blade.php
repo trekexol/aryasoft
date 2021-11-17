@@ -41,7 +41,7 @@
                 <th>Usuario</th>
                 <th>Email</th>
                
-                @if (Auth::user()->role_id  == '1' || Auth::user()->role_id  == '2'  )
+                @if (Auth::user()->role_id  == '1' )
                     <th>Rol</th>
                     <th>Status</th>
                 @endif
@@ -59,9 +59,8 @@
                     <td>{{$user->id}}</td>
                     <td>{!!$user->name!!}</td>
                     <td>{!!$user->email!!}</td>
-                   
-                    <td>{{ $user->roles['description']}}</td>
                     @if (Auth::user()->role_id  == '1')
+                    <td>{{ $user->roles['description']}}</td>
                         @if($user->status == 1)
                             <td>Activo</td>
                         @else

@@ -5,13 +5,13 @@
     <div class="row justify-content-center">
         <div class="col-sm-12">
             <div class="card">
-                <form method="POST" action="{{ route('historial_quotation.store') }}">
+                <form method="POST" action="{{ route('historial_expense.store') }}">
                     @csrf
 
                 <input type="hidden" name="id_user" value="{{$user->id ?? null}}" readonly>
 
                 <div class="card-header text-center h4">
-                        Historial de Cotizaciones
+                        Historial de Compras
                 </div>
 
                 <div class="card-body">
@@ -40,7 +40,7 @@
                           
                             @if (empty($user))
                                 <div id="client_label3" class="form-group col-sm-1">
-                                    <a id="route_select" href="{{ route('historialselect.user',"historial_quotation") }}" title="Seleccionar Usuario"><i class="fa fa-eye"></i></a>  
+                                    <a id="route_select" href="{{ route('historialselect.user',"historial_expense") }}" title="Seleccionar Usuario"><i class="fa fa-eye"></i></a>  
                                 </div>
                             
                                 <div class="col-sm-1">
@@ -57,7 +57,7 @@
                                 <label id="user_label1" for="users" class="col-sm-1 text-md-right">Usuario:</label>
                                 <label id="user_label2" name="id_user" value="{{ $user->id }}" for="users" class="col-sm-2">{{ $user->name ?? ''}}</label>
                                 <div id="client_label3" class="form-group col-sm-1">
-                                    <a id="route_select" href="{{ route('historialselect.user',"historial_quotation") }}" title="Seleccionar Usuario"><i class="fa fa-eye"></i></a>  
+                                    <a id="route_select" href="{{ route('historialselect.user',"historial_expense") }}" title="Seleccionar Usuario"><i class="fa fa-eye"></i></a>  
                                 </div>
                             
                                 <div class="col-sm-1">
@@ -66,13 +66,13 @@
                                     </button>
                                 </div>
                                 <div class="col-md-2">
-                                    <a href="{{ route('historial_quotation') }}" id="btnfacturar" name="btnfacturar" class="btn btn-light2" title="facturar">Limpiar</a>  
+                                    <a href="{{ route('historial_expense') }}" id="btnfacturar" name="btnfacturar" class="btn btn-light2" title="facturar">Limpiar</a>  
                                 </div>
                         </div>
                         @endif
                     </form>
                         <div class="embed-responsive embed-responsive-16by9">
-                            <iframe class="embed-responsive-item" src="{{ route('historial_quotation.pdf',[$date_begin ?? $datenow,$date_end ?? $datenow,$user->id ?? null]) }}" allowfullscreen></iframe>
+                            <iframe class="embed-responsive-item" src="{{ route('historial_expense.pdf',[$date_begin ?? $datenow,$date_end ?? $datenow,$user->id ?? null]) }}" allowfullscreen></iframe>
                           </div>
                         
                         </div>

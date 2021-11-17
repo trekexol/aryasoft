@@ -945,3 +945,14 @@ Route::group(["prefix"=>'historialquotation'],function(){
     Route::post('store','Historial\HistorialQuotationController@store')->name('historial_quotation.store');
     Route::get('pdf/{date_begin}/{date_end}/{id_user?}','Historial\HistorialQuotationController@pdf')->name('historial_quotation.pdf');
 });
+
+Route::group(["prefix"=>'historialselect'],function(){
+    Route::get('user/{route}','Historial\HistorialSelectController@selectUser')->name('historialselect.user');
+   
+});
+
+Route::group(["prefix"=>'historialexpense'],function(){
+    Route::get('index/{id_user?}','Historial\HistorialExpenseController@index')->name('historial_expense');
+    Route::post('store','Historial\HistorialExpenseController@store')->name('historial_expense.store');
+    Route::get('pdf/{date_begin}/{date_end}/{id_user?}','Historial\HistorialExpenseController@pdf')->name('historial_expense.pdf');
+});

@@ -27,7 +27,7 @@
 <body>
 
   <br>
-  <h4 style="color: black; text-align: center">Historial de Cotizaciones</h4>
+  <h4 style="color: black; text-align: center">Historial de Compras</h4>
   <h5 style="color: black; text-align: center">Fecha de Emisión: {{ $date_end ?? $datenow ?? '' }}</h5>
   @if (isset($user))
     <h5 style="color: black; text-align: center">Usuario: {{ $user->name ?? '' }}</h5>
@@ -48,22 +48,10 @@
   @foreach ($historials as $historial)
     <?php 
   
-      $tipo = 'Cotización';
-      $number = $historial->id_quotation;
+      $tipo = 'Compra';
+      $number = $historial->id_expense;
 
-      if ($historial->quotations['number_order'] > 0) {
-          $tipo = 'Pedido';
-          $number = $historial->quotations['number_order'];
-      }
-      if ($historial->quotations['number_delivery_note'] > 0) {
-          $tipo = 'Nota de Entrega';
-          $number = $historial->quotations['number_delivery_note'];
-      }
-      if ($historial->quotations['number_invoice'] > 0){
-          $tipo = 'Factura';
-          $number = $historial->quotations['number_invoice'];
-      }
-      
+
     ?>
     <tr>
       <th style="text-align: center; font-weight: normal;">{{ date_format(date_create($historial->created_at),"d-m-Y h:m:s") }}</th>

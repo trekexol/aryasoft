@@ -291,6 +291,7 @@
                 <div class="bg-white py-2 collapse-inner rounded">
     
                     <a class="collapse-item" href="{{ route('historial_quotation')}}" > <i class="fas fa-archive fa-sm fa-fw mr-2 text-black-400"></i><strong>Historial Cotización</strong></a>
+                    <a class="collapse-item" href="{{ route('historial_expense')}}" > <i class="fas fa-archive fa-sm fa-fw mr-2 text-black-400"></i><strong>Historial Compras</strong></a>
     
             </div>
         </li>

@@ -2,20 +2,17 @@
 
 namespace App\Http\Controllers\Historial;
 
+use App\HistorialExpense;
 use App;
-use App\Client;
-use App\HistorialQuotation;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\UserAccess\UserAccessController;
-use App\Quotation;
 use App\User;
-use App\Vendor;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class HistorialQuotationController extends Controller
+class HistorialExpenseController extends Controller
 {
     public $userAccess;
     public $modulo = 'Historial';
@@ -32,7 +29,7 @@ class HistorialQuotationController extends Controller
         $userAccess = new UserAccessController();
 
         if($userAccess->validate_user_access($this->modulo)){
-            $historials = HistorialQuotation::on(Auth::user()->database_name)->get();
+            $historials = HistorialExpense::on(Auth::user()->database_name)->get();
             $date = Carbon::now();
             $datenow = $date->format('d-m-Y'); 
             $user = null;
@@ -40,9 +37,8 @@ class HistorialQuotationController extends Controller
             if(isset($id_user)){
                 $user   =   User::on(Auth::user()->database_name)->find($id_user);   
             }
-             
 
-            return view('admin.historials.quotations.index_historial_quotation',compact('historials','datenow','user'));
+            return view('admin.historials.expenses.index_historial_expense',compact('historials','datenow','user'));
         }else{
             return redirect('/home')->withDanger('No tiene Acceso al modulo de '.$this->modulo);
         }
@@ -59,14 +55,14 @@ class HistorialQuotationController extends Controller
             $user   =   User::on(Auth::user()->database_name)->find($request->id_user);   
         }
       
-        return view('admin.historials.quotations.index_historial_quotation',compact('date_end','user','date_begin'));
+        return view('admin.historials.expenses.index_historial_expense',compact('date_end','user','date_begin'));
    }
 
    function pdf($date_begin,$date_end,$id_user = null)
    {
        $user = null;
        $pdf = App::make('dompdf.wrapper');
-       $quotations = null;
+       $expenses = null;
        
        $date = Carbon::now();
        $datenow = $date->format('d-m-Y'); 
@@ -93,7 +89,7 @@ class HistorialQuotationController extends Controller
        $period = $date->format('Y'); 
 
        if(isset($id_user)){
-            $historials    = HistorialQuotation::on(Auth::user()->database_name)
+            $historials    = HistorialExpense::on(Auth::user()->database_name)
                                                 ->whereRaw(
                                                     "(DATE_FORMAT(created_at, '%Y-%m-%d') >= ? AND DATE_FORMAT(created_at, '%Y-%m-%d') <= ?)", 
                                                     [$date_begin_consult, $date_end_consult])
@@ -102,7 +98,7 @@ class HistorialQuotationController extends Controller
                                                 ->get();
             $user   =   User::on(Auth::user()->database_name)->find($id_user);             
        }else{
-            $historials    = HistorialQuotation::on(Auth::user()->database_name)
+            $historials    = HistorialExpense::on(Auth::user()->database_name)
                                                 ->whereRaw(
                                                     "(DATE_FORMAT(created_at, '%Y-%m-%d') >= ? AND DATE_FORMAT(created_at, '%Y-%m-%d') <= ?)", 
                                                     [$date_begin_consult, $date_end_consult])
@@ -112,32 +108,32 @@ class HistorialQuotationController extends Controller
        
        
        
-       $pdf = $pdf->loadView('admin.historials.quotations.historial_quotation_pdf',compact('historials','datenow','date_end','user'));
+       $pdf = $pdf->loadView('admin.historials.expenses.historial_expense_pdf',compact('historials','datenow','date_end','user'));
        return $pdf->stream();
                 
    }
 
 
-   public function registerAction($quotation,$type,$description){
+   public function registerAction($expense,$type,$description){
 
-        $historial = new HistorialQuotation();
+        $historial = new HistorialExpense();
         $historial->setConnection(Auth::user()->database_name);
 
         $user       =   auth()->user();
 
-        if($type == "quotation"){
-            $historial->id_quotation = $quotation->id;
+        if($type == "expense"){
+            $historial->id_expense = $expense->id;
             $historial->id_user = $user->id;
-        }else if($type == "quotation_product"){
-            $historial->id_quotation = $quotation->id_quotation;
+        }else if($type == "expense_product"){
+            $historial->id_expense = $expense->id_expense;
             $historial->id_user = $user->id;
-            $historial->id_quotation_product = $quotation->id ?? null;
-        }else if($type == "quotation_payment"){
-            $historial->id_quotation = $quotation->id_quotation;
+            $historial->id_expense_product = $expense->id ?? null;
+        }else if($type == "expense_payment"){
+            $historial->id_expense = $expense->id_expense;
             $historial->id_user = $user->id;
-            $historial->id_quotation_payment = $quotation->id ?? null;
+            $historial->id_expense_payment = $expense->id ?? null;
         }else{
-            $historial->id_quotation = $quotation->id;
+            $historial->id_expense = $expense->id;
             $historial->id_user = $user->id;
         }
       

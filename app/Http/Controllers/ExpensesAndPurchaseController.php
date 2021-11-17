@@ -20,6 +20,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Anticipo;
 use App\Company;
+use App\Http\Controllers\Historial\HistorialExpenseController;
 use App\Http\Controllers\UserAccess\UserAccessController;
 use App\IslrConcept;
 use Illuminate\Support\Facades\Auth;
@@ -719,6 +720,11 @@ class ExpensesAndPurchaseController extends Controller
     
         $var->save();
 
+        $historial_expense = new HistorialExpenseController();
+
+        $historial_expense->registerAction($var,"expense","Creó la Compra");
+
+
         return redirect('expensesandpurchases/register/'.$var->id.'/bolivares')->withSuccess('Gasto o Compra Resgistrada Correctamente!');
     }
 
@@ -791,6 +797,10 @@ class ExpensesAndPurchaseController extends Controller
         $var->status =  1;
     
         $var->save();
+
+        $historial_expense = new HistorialExpenseController();
+
+        $historial_expense->registerAction($var,"expense_product","Registró un Producto o Servicio");
 
         return redirect('expensesandpurchases/register/'.$var->id_expense.'/'.$coin.'')->withSuccess('Agregado Exitosamente!');
     }
@@ -1698,7 +1708,10 @@ class ExpensesAndPurchaseController extends Controller
 
                     $this->add_pay_movement($bcv,$payment_type,$header_voucher->id,$var->id_account,$expense->id,$user_id,0,$var->amount);
                     
-                   
+                    $historial_expense = new HistorialExpenseController();
+
+                    $historial_expense->registerAction($var,"expense_payment","Se registró un Pago");
+
                 }
                 
                 if($validate_boolean2 == true){
@@ -1706,6 +1719,9 @@ class ExpensesAndPurchaseController extends Controller
                 
                     $this->add_pay_movement($bcv,$payment_type2,$header_voucher->id,$var2->id_account,$expense->id,$user_id,0,$var2->amount);
                     
+                    $historial_expense = new HistorialExpenseController();
+
+                    $historial_expense->registerAction($var2,"expense_payment","Se registró un Pago");
                 }
                 
                 if($validate_boolean3 == true){
@@ -1713,31 +1729,45 @@ class ExpensesAndPurchaseController extends Controller
 
                     $this->add_pay_movement($bcv,$payment_type3,$header_voucher->id,$var3->id_account,$expense->id,$user_id,0,$var3->amount);
                 
-                    
+                    $historial_expense = new HistorialExpenseController();
+
+                    $historial_expense->registerAction($var3,"expense_payment","Se registró un Pago");
                 }
                 if($validate_boolean4 == true){
                     $var4->save();
 
                     $this->add_pay_movement($bcv,$payment_type4,$header_voucher->id,$var4->id_account,$expense->id,$user_id,0,$var4->amount);
                 
+                    $historial_expense = new HistorialExpenseController();
+
+                    $historial_expense->registerAction($var4,"expense_payment","Se registró un Pago");
                 }
                 if($validate_boolean5 == true){
                     $var5->save();
 
                     $this->add_pay_movement($bcv,$payment_type5,$header_voucher->id,$var5->id_account,$expense->id,$user_id,0,$var5->amount);
                 
+                    $historial_expense = new HistorialExpenseController();
+
+                    $historial_expense->registerAction($var5,"expense_payment","Se registró un Pago");
                 }
                 if($validate_boolean6 == true){
                     $var6->save();
 
                     $this->add_pay_movement($bcv,$payment_type6,$header_voucher->id,$var6->id_account,$expense->id,$user_id,0,$var6->amount);
                 
+                    $historial_expense = new HistorialExpenseController();
+
+                    $historial_expense->registerAction($var6,"expense_payment","Se registró un Pago");
                 }
                 if($validate_boolean7 == true){
                     $var7->save();
 
                     $this->add_pay_movement($bcv,$payment_type7,$header_voucher->id,$var7->id_account,$expense->id,$user_id,0,$var7->amount);
                 
+                    $historial_expense = new HistorialExpenseController();
+
+                    $historial_expense->registerAction($var7,"expense_payment","Se registró un Pago");
                 }
 
                 
@@ -1915,7 +1945,9 @@ class ExpensesAndPurchaseController extends Controller
                 return redirect('expensesandpurchases/registerpaymentafter/'.$expense->id.'/'.$coin.'')->withDanger('La suma de los pagos es diferente al monto Total a Pagar!');
             }
 
-            
+            $historial_expense = new HistorialExpenseController();
+
+            $historial_expense->registerAction($expense,"expense","Se pagó la Compra");
 
             return redirect('expensesandpurchases/expensevoucher/'.$expense->id.'/'.$coin.'')->withSuccess('Factura Guardada con Exito!');
 
@@ -2043,6 +2075,9 @@ class ExpensesAndPurchaseController extends Controller
             $this->add_movement($expense->rate,$header_voucher->id,$account_cuentas_por_pagar_proveedores->id,$expense->id,$user_id,0,$sin_formato_amount_with_iva);
         }
 
+        $historial_expense = new HistorialExpenseController();
+
+        $historial_expense->registerAction($expense,"expense","Se registró la Compra a Crédito");
          
 
         return redirect('expensesandpurchases/expensevoucher/'.$expense->id.'/'.$coin.'')->withSuccess('Gasto o Compra Guardada con Exito!');
