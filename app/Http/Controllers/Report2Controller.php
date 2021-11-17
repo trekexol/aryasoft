@@ -27,11 +27,13 @@ use Illuminate\Support\Facades\Auth;
 class Report2Controller extends Controller
 {
    
-
+    public $modulo = "Reportes";
    
     public function index_accounts_receivable($typeperson,$id_client_or_vendor = null)
     {
-        if($this->userAccess->validate_user_access($this->modulo)){
+        $userAccess = new UserAccessController();
+
+        if($userAccess->validate_user_access($this->modulo)){
             $date = Carbon::now();
             $datenow = $date->format('Y-m-d');   
             $client = null; 
@@ -56,8 +58,9 @@ class Report2Controller extends Controller
 
     public function index_debtstopay($id_provider = null)
     {
+        $userAccess = new UserAccessController();
         
-        if($this->userAccess->validate_user_access($this->modulo)){
+        if($userAccess->validate_user_access($this->modulo)){
             $date = Carbon::now();
             $datenow = $date->format('Y-m-d');   
             $provider = null; 
