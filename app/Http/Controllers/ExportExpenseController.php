@@ -39,7 +39,7 @@ class ExportExpenseController extends Controller
                 $total_retiene_iva = $this->calculatarTotalProductosSinIva($expense);
                 
                 $content .= str_replace('-', '', $company->code_rif).'	'.$expense->date->format('Ym').'	'.$expense->date->format('Y-m-d').'	C	01	'
-                .str_replace('-', '', $expense->providers['code_provider']).'	'.$expense->invoice.'	'.$expense->serie.'	'.$expense->amount_with_iva.'	'.$expense->base_imponible
+                .str_replace('-', '', $expense->providers['code_provider']).'	'.$expense->invoice.'	'.$expense->serie.'	'.$expense->amount+$expense->amount_iva.'	'.$expense->base_imponible
                 .'	'.$expense->retencion_iva.'	0	'.$expense->date->format('Ym').str_pad($expense->id, 8, "0", STR_PAD_LEFT).'	'.number_format($total_retiene_iva, 2, '.', '').'	'.number_format($expense->iva_percentage, 2, '.', '').'	0';
                 $content .= "\n";
             }    

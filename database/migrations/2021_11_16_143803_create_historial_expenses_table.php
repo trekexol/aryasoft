@@ -21,10 +21,8 @@ class CreateHistorialExpensesTable extends Migration
             $table->unsignedBigInteger('id_expense_payment')->nullable(); 
             $table->string('description');
 
-            $table->foreign('id_expense')->references('id')->on('expenses_and_purchases');
+           
             $table->foreign('id_user')->references('id')->on('users');
-            $table->foreign('id_expense_product')->references('id')->on('expenses_details');
-            $table->foreign('id_expense_payment')->references('id')->on('expense_payments');
             $table->timestamps();
         });
     }

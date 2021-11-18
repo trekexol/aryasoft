@@ -188,7 +188,7 @@
     $monto_m = $quotation->amount_with_iva;  
     $signo_moneda = 'Bs.';
   }
-   $texto_taza = ' Taza de cambio a la fecha '.($quotation->bcv ?? 1).' Bs.';
+   $texto_tasa = ' Tasa de cambio a la fecha '.($quotation->bcv ?? 1).' Bs.';
 
 ?>
 
@@ -248,7 +248,7 @@
   </tr> 
 @else
   <tr>
-    <th style="text-align: left; width: 38%; border-bottom-color: white; border-right-color: white; font-weight: normal; padding-left: 5px;" >{{$texto_taza}}</th>
+    <th style="text-align: left; width: 38%; border-bottom-color: white; border-right-color: white; font-weight: normal; padding-left: 5px;" >{{$texto_tasa}}</th>
     <th style="text-align: right; font-weight: normal; width: 21%; border-bottom-color: white;">MONTO TOTAL {{$signo_moneda}}</th>
     <th style="text-align: right; font-weight: normal; width: 21%;">{{ number_format($monto_m, 2, ',', '.') }}</th>
   </tr> 

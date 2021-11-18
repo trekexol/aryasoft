@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Anticipo;
 use App\ComboProduct;
+use App\ExpensePayment;
 use App\ExpensesDetail;
 use App\Inventory;
 use App\QuotationPayment;
@@ -48,6 +49,45 @@ class GlobalController extends Controller
             ->where(function ($query) use ($quotation){
                 $query->where('id_quotation',null)
                     ->orWhere('id_quotation',$quotation->id);
+            })
+            ->where('status', '=', 'M')
+            ->update(['status' => '1']);
+        }
+    }
+
+    public function procesar_anticipos_expense($expense,$total_pay)
+    {
+        
+        if($total_pay >= 0){
+            
+            $anticipos_old = DB::connection(Auth::user()->database_name)->table('anticipos')
+                                ->where('id_provider', '=', $expense->id_provider)
+                                ->where(function ($query) use ($expense){
+                                    $query->where('id_expense',null)
+                                        ->orWhere('id_expense',$expense->id);
+                                })
+                                ->where('status', '=', '1')->get();
+
+            foreach($anticipos_old as $anticipo){
+                DB::connection(Auth::user()->database_name)->table('anticipo_expenses')->insert(['id_expense' => $expense->id,'id_anticipo' => $anticipo->id]);
+            } 
+
+
+            /*Verificamos si el proveedor tiene anticipos activos */
+            DB::connection(Auth::user()->database_name)->table('anticipos')
+                    ->where('id_provider', '=', $expense->id_provider)
+                    ->where(function ($query) use ($expense){
+                        $query->where('id_expense',null)
+                            ->orWhere('id_expense',$expense->id);
+                    })
+                    ->where('status', '=', '1')
+                    ->update(['status' => 'C']);
+
+            //los que quedaron en espera, pasan a estar activos
+            DB::connection(Auth::user()->database_name)->table('anticipos')->where('id_provider', '=', $expense->id_provider)
+            ->where(function ($query) use ($expense){
+                $query->where('id_expense',null)
+                    ->orWhere('id_expense',$expense->id);
             })
             ->where('status', '=', 'M')
             ->update(['status' => '1']);
@@ -152,14 +192,14 @@ class GlobalController extends Controller
                     $var->setConnection(Auth::user()->database_name);
 
                     $var->id_anticipo_restante = $anticipo->id;
-                    $var->date = $expense->date_billing;
+                    $var->date = $expense->date;
                     $var->id_provider = $expense->id_provider;
                     $user       =   auth()->user();
                     $var->id_user = $user->id;
                     $var->id_account = $anticipo->id_account;
                     $var->coin = $anticipo->coin;
                     $var->amount = $amount_anticipo_new;
-                    $var->rate = $expense->bcv;
+                    $var->rate = $expense->rate;
                     $var->reference = $anticipo->reference;
                     $var->status = 1;
                     $var->save();
@@ -378,6 +418,22 @@ class GlobalController extends Controller
         
         
         $var->rate = $bcv;
+        
+        $var->status =  1;
+        $var->save();
+        
+        return $var->id;
+    }
+
+    public function add_payment_expense($expense,$id_account,$payment_type,$amount,$bcv){
+        $var = new ExpensePayment();
+        $var->setConnection(Auth::user()->database_name);
+
+        $var->id_expense = $expense->id;
+        $var->id_account = $id_account;
+   
+        $var->payment_type = $payment_type;
+        $var->amount = $amount;
         
         $var->status =  1;
         $var->save();

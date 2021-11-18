@@ -21,10 +21,7 @@ class CreateHistorialAnticiposTable extends Migration
             $table->unsignedBigInteger('id_expense')->nullable(); 
             $table->string('description');
 
-            $table->foreign('id_anticipo')->references('id')->on('anticipos');
             $table->foreign('id_user')->references('id')->on('users');
-            $table->foreign('id_quotation')->references('id')->on('quotations');
-            $table->foreign('id_expense')->references('id')->on('expenses_and_purchases');
             $table->timestamps();
         });
     }

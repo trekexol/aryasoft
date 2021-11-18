@@ -516,7 +516,7 @@ class AnticipoController extends Controller
             $bcv = $company->rate;
         }
 
-        if($anticipo->coin != 'bolivares'){
+        if(isset($anticipo->coin) && $anticipo->coin != 'bolivares'){
             
             $anticipo->amount = $anticipo->amount / $anticipo->rate;
             

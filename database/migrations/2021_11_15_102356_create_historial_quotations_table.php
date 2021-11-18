@@ -21,7 +21,7 @@ class CreateHistorialQuotationsTable extends Migration
             $table->unsignedBigInteger('id_quotation_payment')->nullable(); 
             $table->string('description');
 
-            $table->foreign('id_quotation')->references('id')->on('quotations');
+           
             $table->foreign('id_user')->references('id')->on('users');
             $table->timestamps();
         });
