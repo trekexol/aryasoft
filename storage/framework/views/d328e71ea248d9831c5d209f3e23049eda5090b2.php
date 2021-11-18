@@ -69,6 +69,7 @@
         <table class="table table-light2 table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead>
             <tr>
+                <th class="text-center"></th>
                 <th class="text-center">Cliente</th>
                 <th class="text-center">Caja/Banco</th>
                 <th class="text-center">Fecha del Anticipo</th>
@@ -90,6 +91,7 @@
                         }
                     ?>
                     <tr>
+                        <td><?php echo e($anticipo->id); ?> <?php echo e((isset($anticipo->id_anticipo_restante)) ? 'Restante de: '.$anticipo->id_anticipo_restante : ''); ?></td>
                     <?php if(isset($anticipo->expenses['serie'])): ?>
                         <td class="text-center"><?php echo e($anticipo->providers['razon_social'] ?? ''); ?> , fact(<?php echo e($anticipo->expenses['serie'] ?? ''); ?>)</td>
                     <?php else: ?>
