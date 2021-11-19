@@ -292,6 +292,7 @@
     
                     <a class="collapse-item" href="<?php echo e(route('historial_quotation')); ?>" > <i class="fas fa-archive fa-sm fa-fw mr-2 text-black-400"></i><strong>Historial Cotización</strong></a>
                     <a class="collapse-item" href="<?php echo e(route('historial_expense')); ?>" > <i class="fas fa-archive fa-sm fa-fw mr-2 text-black-400"></i><strong>Historial Compras</strong></a>
+                    <a class="collapse-item" href="<?php echo e(route('historial_anticipo')); ?>" > <i class="fas fa-archive fa-sm fa-fw mr-2 text-black-400"></i><strong>Historial Anticipos</strong></a>
     
             </div>
         </li>

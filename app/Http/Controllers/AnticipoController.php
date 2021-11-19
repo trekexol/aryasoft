@@ -10,6 +10,7 @@ use App\Company;
 use App\DetailVoucher;
 use App\ExpensesAndPurchase;
 use App\HeaderVoucher;
+use App\Http\Controllers\Historial\HistorialAnticipoController;
 use App\Http\Controllers\UserAccess\UserAccessController;
 use App\Modelo;
 use App\Provider;
@@ -325,7 +326,11 @@ class AnticipoController extends Controller
         
 
         if((isset($var->id_client)) || (isset($var->id_quotation))){
-            
+
+            $historial_expense = new HistorialAnticipoController();
+
+            $historial_expense->registerAction($var,"Se registro el Anticipo");
+
             return redirect('/anticipos')->withSuccess('Registro Exitoso!');
         }else{
             return redirect('/anticipos/indexprovider')->withSuccess('Registro Exitoso!');

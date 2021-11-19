@@ -956,3 +956,10 @@ Route::group(["prefix"=>'historialexpense'],function(){
     Route::post('store','Historial\HistorialExpenseController@store')->name('historial_expense.store');
     Route::get('pdf/{date_begin}/{date_end}/{id_user?}','Historial\HistorialExpenseController@pdf')->name('historial_expense.pdf');
 });
+
+
+Route::group(["prefix"=>'historialanticipo'],function(){
+    Route::get('index/{id_user?}','Historial\HistorialAnticipoController@index')->name('historial_anticipo');
+    Route::post('store','Historial\HistorialAnticipoController@store')->name('historial_anticipo.store');
+    Route::get('pdf/{date_begin}/{date_end}/{id_user?}','Historial\HistorialAnticipoController@pdf')->name('historial_anticipo.pdf');
+});

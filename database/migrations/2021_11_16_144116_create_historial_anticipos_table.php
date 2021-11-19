@@ -17,8 +17,6 @@ class CreateHistorialAnticiposTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('id_anticipo'); 
             $table->unsignedBigInteger('id_user');
-            $table->unsignedBigInteger('id_quotation')->nullable(); 
-            $table->unsignedBigInteger('id_expense')->nullable(); 
             $table->string('description');
 
             $table->foreign('id_user')->references('id')->on('users');

@@ -2562,6 +2562,8 @@ class ExpensesAndPurchaseController extends Controller
         $coin = request('coin_modal');
         
         $detail_old = ExpensesDetail::on(Auth::user()->database_name)->find($id_detail); 
+
+        
         
         if(isset($detail_old) && $detail_old->status == "C"){
             ExpensesDetail::on(Auth::user()->database_name)
@@ -2577,7 +2579,9 @@ class ExpensesAndPurchaseController extends Controller
             $detail_old->delete(); 
         }
 
-       
+        $historial_expense = new HistorialExpenseController();
+
+        $historial_expense->registerAction($detail_old,"expense_product","Se elimino la Compra");
 
         return redirect('/expensesandpurchases/register/'.$detail_old->id_expense.'/'.$coin.'')->withDanger('Eliminacion exitosa!!');
     }
