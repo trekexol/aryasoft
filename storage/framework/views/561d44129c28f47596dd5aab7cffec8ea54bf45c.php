@@ -110,49 +110,55 @@
   </tr> 
   <?php $__currentLoopData = $inventories_quotations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $var): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
       <?php
-      $percentage = (($var->price * $var->amount_quotation) * $var->discount)/100;
+      $price = bcdiv(($var->price / ($bcv ?? 1)), '1', 2);
+      $percentage = (($price * $var->amount_quotation) * $var->discount)/100;
 
-      $total_less_percentage = (number_format(bcdiv($var->price, '1', 2),2,'.','') * $var->amount_quotation) - $percentage;
-
-      $total_less_percentage = $total_less_percentage / ($bcv ?? 1);
+      $total_less_percentage = (number_format(bcdiv($price, '1', 2),2,'.','') * $var->amount_quotation) - $percentage;
+      
+      $total_less_percentage = $total_less_percentage ;
+      
       ?>
     <tr>
       <th style="text-align: center; font-weight: normal;"><?php echo e($var->code_comercial); ?></th>
       <th style="text-align: center; font-weight: normal;"><?php echo e($var->description); ?></th>
       <th style="text-align: center; font-weight: normal;"><?php echo e(number_format($var->amount_quotation, 0, '', '.')); ?></th>
-      <th style="text-align: center; font-weight: normal;"><?php echo e(number_format($var->price / ($bcv ?? 1), 2, ',', '.')); ?></th>
+      <th style="text-align: center; font-weight: normal;"><?php echo e(number_format($price, 2, ',', '.')); ?></th>
       <th style="text-align: center; font-weight: normal;"><?php echo e($var->discount); ?>%</th>
-      <th style="text-align: right; font-weight: normal;"><?php echo e(number_format($total_less_percentage, 2, ',', '.')); ?></th>
+      <th style="text-align: right; font-weight: normal;"><?php echo e(number_format(bcdiv($total_less_percentage, '1', 2), 2, ',', '.')); ?></th>
     </tr> 
   <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> 
 </table>
 
 
 <?php
+
+  $base_imponible = $quotation->base_imponible;
+  $total_factura = $quotation->total_factura;
+
   $iva = ($quotation->base_imponible * $quotation->iva_percentage)/100;
 
-  $total = $quotation->total_factura + $iva;
+  $total = $total_factura + $iva;
 
-  $total_petro = $total / ($bcv ?? 1) / $company->rate_petro;
+  $total_petro = $total / $company->rate_petro;
 
-  $iva = $iva / ($bcv ?? 1);
+  $iva = $iva;
 
-  $total = $total / ($bcv ?? 1);
+  $total = $total;
 ?>
 
 <table style="width: 100%;">
   <!--<tr>
     <th style="text-align: right; font-weight: normal; width: 79%; border-bottom-color: white;">Sub Total</th>
-    <th style="text-align: right; font-weight: normal; width: 21%;"><?php echo e(number_format($quotation->total_factura / ($bcv ?? 1), 2, ',', '.')); ?></th>
+    <th style="text-align: right; font-weight: normal; width: 21%;"><?php echo e(number_format($quotation->total_factura, 2, ',', '.')); ?></th>
   </tr>--> 
 
   <tr>
     <th style="text-align: right; font-weight: normal; width: 79%; border-bottom-color: white;">Base Imponible</th>
-    <th style="text-align: right; font-weight: normal; width: 21%;"><?php echo e(number_format($quotation->base_imponible / ($bcv ?? 1), 2, ',', '.')); ?></th>
+    <th style="text-align: right; font-weight: normal; width: 21%;"><?php echo e(number_format($base_imponible, 2, ',', '.')); ?></th>
   </tr> 
   <tr>
     <th style="text-align: right; font-weight: normal; width: 79%; border-bottom-color: white;">Ventas Exentas</th>
-    <th style="text-align: right; font-weight: normal; width: 21%;"><?php echo e(number_format(($retiene_iva ?? 0) / ($bcv ?? 1), 2, ',', '.')); ?></th>
+    <th style="text-align: right; font-weight: normal; width: 21%;"><?php echo e(number_format(($retiene_iva ?? 0), 2, ',', '.')); ?></th>
   </tr> 
   <tr>
     <th style="text-align: right; font-weight: normal; width: 79%; border-bottom-color: white;">I.V.A.<?php echo e($quotation->iva_percentage); ?>%</th>
@@ -249,57 +255,65 @@
     <th style="text-align: center; ">Total</th>
   </tr> 
   <?php $__currentLoopData = $inventories_quotations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $var): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-      <?php
-      $percentage = (($var->price * $var->amount_quotation) * $var->discount)/100;
+  <?php
+      $price = bcdiv(($var->price / ($bcv ?? 1)), '1', 2);
+      $percentage = (($price * $var->amount_quotation) * $var->discount)/100;
 
-      $total_less_percentage = (number_format($var->price,2,'.','') * $var->amount_quotation) - $percentage;
-
-      $total_less_percentage = $total_less_percentage / ($bcv ?? 1);
-            ?>
-    <tr>
-      <th style="text-align: center; font-weight: normal;"><?php echo e($var->code_comercial); ?></th>
-      <th style="text-align: center; font-weight: normal;"><?php echo e($var->description); ?></th>
-      <th style="text-align: center; font-weight: normal;"><?php echo e(number_format($var->amount_quotation, 0, '', '.')); ?></th>
-      <th style="text-align: center; font-weight: normal;"><?php echo e(number_format($var->price / ($bcv ?? 1), 2, ',', '.')); ?></th>
-      <th style="text-align: center; font-weight: normal;"><?php echo e($var->discount); ?>%</th>
-      <th style="text-align: right; font-weight: normal;"><?php echo e(number_format($total_less_percentage, 2, ',', '.')); ?></th>
-    </tr> 
+      $total_less_percentage = (number_format(bcdiv($price, '1', 2),2,'.','') * $var->amount_quotation) - $percentage;
+      
+      $total_less_percentage = $total_less_percentage ;
+    
+    ?>
+  <tr>
+    <th style="text-align: center; font-weight: normal;"><?php echo e($var->code_comercial); ?></th>
+    <th style="text-align: center; font-weight: normal;"><?php echo e($var->description); ?></th>
+    <th style="text-align: center; font-weight: normal;"><?php echo e(number_format($var->amount_quotation, 0, '', '.')); ?></th>
+    <th style="text-align: center; font-weight: normal;"><?php echo e(number_format($price, 2, ',', '.')); ?></th>
+    <th style="text-align: center; font-weight: normal;"><?php echo e($var->discount); ?>%</th>
+    <th style="text-align: right; font-weight: normal;"><?php echo e(number_format(bcdiv($total_less_percentage, '1', 2), 2, ',', '.')); ?></th>
+  </tr> 
   <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> 
-</table>
+  </table>
 
 
-<?php
+  <?php
+
+  $base_imponible = $quotation->base_imponible;
+  $total_factura = $quotation->total_factura;
+
   $iva = ($quotation->base_imponible * $quotation->iva_percentage)/100;
 
-  $total = $quotation->total_factura + $iva;
+  $total = $total_factura + $iva;
 
-  $total_petro = $total / ($bcv ?? 1) / $company->rate_petro;
+  $total_petro = $total / $company->rate_petro;
 
-  $iva = $iva / ($bcv ?? 1);
+  $iva = $iva;
 
-  $total = $total / ($bcv ?? 1);
+  $total = $total;
 ?>
 
-<table style="width: 100%;">
+
+  <table style="width: 100%;">
   <!--<tr>
-    <th style="text-align: right; font-weight: normal; width: 79%; border-bottom-color: white;">Sub Total</th>
-    <th style="text-align: right; font-weight: normal; width: 21%;"><?php echo e(number_format($quotation->total_factura / ($bcv ?? 1), 2, ',', '.')); ?></th>
+  <th style="text-align: right; font-weight: normal; width: 79%; border-bottom-color: white;">Sub Total</th>
+  <th style="text-align: right; font-weight: normal; width: 21%;"><?php echo e(number_format($quotation->total_factura, 2, ',', '.')); ?></th>
   </tr>--> 
+
   <tr>
-    <th style="text-align: right; font-weight: normal; width: 79%; border-bottom-color: white;">Base Imponible</th>
-    <th style="text-align: right; font-weight: normal; width: 21%;"><?php echo e(number_format($quotation->base_imponible / ($bcv ?? 1), 2, ',', '.')); ?></th>
+  <th style="text-align: right; font-weight: normal; width: 79%; border-bottom-color: white;">Base Imponible</th>
+  <th style="text-align: right; font-weight: normal; width: 21%;"><?php echo e(number_format($base_imponible, 2, ',', '.')); ?></th>
   </tr> 
   <tr>
-    <th style="text-align: right; font-weight: normal; width: 79%; border-bottom-color: white;">Ventas Exentas</th>
-    <th style="text-align: right; font-weight: normal; width: 21%;"><?php echo e(number_format(($retiene_iva ?? 0) / ($bcv ?? 1), 2, ',', '.')); ?></th>
+  <th style="text-align: right; font-weight: normal; width: 79%; border-bottom-color: white;">Ventas Exentas</th>
+  <th style="text-align: right; font-weight: normal; width: 21%;"><?php echo e(number_format(($retiene_iva ?? 0), 2, ',', '.')); ?></th>
   </tr> 
   <tr>
-    <th style="text-align: right; font-weight: normal; width: 79%; border-bottom-color: white;">I.V.A.<?php echo e($quotation->iva_percentage); ?>%</th>
-    <th style="text-align: right; font-weight: normal; width: 21%;"><?php echo e(number_format($iva, 2, ',', '.')); ?></th>
+  <th style="text-align: right; font-weight: normal; width: 79%; border-bottom-color: white;">I.V.A.<?php echo e($quotation->iva_percentage); ?>%</th>
+  <th style="text-align: right; font-weight: normal; width: 21%;"><?php echo e(number_format($iva, 2, ',', '.')); ?></th>
   </tr> 
   <tr>
-    <th style="text-align: right; font-weight: normal; width: 79%; border-top-color: rgb(17, 9, 9); ">MONTO TOTAL</th>
-    <th style="text-align: right; font-weight: normal; width: 21%; border-top-color: rgb(17, 9, 9);"><?php echo e(number_format($total, 2, ',', '.')); ?></th>
+  <th style="text-align: right; font-weight: normal; width: 79%; border-top-color: rgb(17, 9, 9); ">MONTO TOTAL</th>
+  <th style="text-align: right; font-weight: normal; width: 21%; border-top-color: rgb(17, 9, 9);"><?php echo e(number_format($total, 2, ',', '.')); ?></th>
   </tr> 
 </table>
 <div style="color: black;font-size: 9pt; text-align: center;">Copia (Sin Derecho a Crédito Fiscal)</div>
@@ -388,58 +402,66 @@
     <th style="text-align: center; ">Total</th>
   </tr> 
   <?php $__currentLoopData = $inventories_quotations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $var): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-      <?php
-      $percentage = (($var->price * $var->amount_quotation) * $var->discount)/100;
+  <?php
+      $price = bcdiv(($var->price / ($bcv ?? 1)), '1', 2);
+      $percentage = (($price * $var->amount_quotation) * $var->discount)/100;
 
-      $total_less_percentage = (number_format($var->price,2,'.','') * $var->amount_quotation) - $percentage;
-
-      $total_less_percentage = $total_less_percentage / ($bcv ?? 1);
-            ?>
+      $total_less_percentage = (number_format(bcdiv($price, '1', 2),2,'.','') * $var->amount_quotation) - $percentage;
+      
+      $total_less_percentage = $total_less_percentage ;
+      
+      ?>
     <tr>
       <th style="text-align: center; font-weight: normal;"><?php echo e($var->code_comercial); ?></th>
       <th style="text-align: center; font-weight: normal;"><?php echo e($var->description); ?></th>
       <th style="text-align: center; font-weight: normal;"><?php echo e(number_format($var->amount_quotation, 0, '', '.')); ?></th>
-      <th style="text-align: center; font-weight: normal;"><?php echo e(number_format($var->price / ($bcv ?? 1), 2, ',', '.')); ?></th>
+      <th style="text-align: center; font-weight: normal;"><?php echo e(number_format($price, 2, ',', '.')); ?></th>
       <th style="text-align: center; font-weight: normal;"><?php echo e($var->discount); ?>%</th>
-      <th style="text-align: right; font-weight: normal;"><?php echo e(number_format($total_less_percentage, 2, ',', '.')); ?></th>
+      <th style="text-align: right; font-weight: normal;"><?php echo e(number_format(bcdiv($total_less_percentage, '1', 2), 2, ',', '.')); ?></th>
     </tr> 
-  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> 
-</table>
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> 
+    </table>
 
 
-<?php
-  $iva = ($quotation->base_imponible * $quotation->iva_percentage)/100;
+    <?php
 
-  $total = $quotation->total_factura + $iva;
+        $base_imponible = $quotation->base_imponible;
+        $total_factura = $quotation->total_factura;
 
-  $total_petro = $total / ($bcv ?? 1) / $company->rate_petro;
+        $iva = ($quotation->base_imponible * $quotation->iva_percentage)/100;
 
-  $iva = $iva / ($bcv ?? 1);
+        $total = $total_factura + $iva;
 
-  $total = $total / ($bcv ?? 1);
-?>
+        $total_petro = $total / $company->rate_petro;
 
-<table style="width: 100%;">
-  <!--<tr>
+        $iva = $iva;
+
+        $total = $total;
+    ?>
+
+    <table style="width: 100%;">
+    <!--<tr>
     <th style="text-align: right; font-weight: normal; width: 79%; border-bottom-color: white;">Sub Total</th>
-    <th style="text-align: right; font-weight: normal; width: 21%;"><?php echo e(number_format($quotation->total_factura / ($bcv ?? 1), 2, ',', '.')); ?></th>
-  </tr>--> 
-  <tr>
+    <th style="text-align: right; font-weight: normal; width: 21%;"><?php echo e(number_format($total_factura / ($bcv ?? 1), 2, ',', '.')); ?></th>
+    </tr>--> 
+
+    <tr>
     <th style="text-align: right; font-weight: normal; width: 79%; border-bottom-color: white;">Base Imponible</th>
-    <th style="text-align: right; font-weight: normal; width: 21%;"><?php echo e(number_format($quotation->base_imponible / ($bcv ?? 1), 2, ',', '.')); ?></th>
-  </tr> 
-  <tr>
+    <th style="text-align: right; font-weight: normal; width: 21%;"><?php echo e(number_format($base_imponible, 2, ',', '.')); ?></th>
+    </tr> 
+    <tr>
     <th style="text-align: right; font-weight: normal; width: 79%; border-bottom-color: white;">Ventas Exentas</th>
-    <th style="text-align: right; font-weight: normal; width: 21%;"><?php echo e(number_format(($retiene_iva ?? 0) / ($bcv ?? 1), 2, ',', '.')); ?></th>
-  </tr> 
-  <tr>
+    <th style="text-align: right; font-weight: normal; width: 21%;"><?php echo e(number_format(($retiene_iva ?? 0), 2, ',', '.')); ?></th>
+    </tr> 
+    <tr>
     <th style="text-align: right; font-weight: normal; width: 79%; border-bottom-color: white;">I.V.A.<?php echo e($quotation->iva_percentage); ?>%</th>
     <th style="text-align: right; font-weight: normal; width: 21%;"><?php echo e(number_format($iva, 2, ',', '.')); ?></th>
-  </tr> 
-  <tr>
+    </tr> 
+    <tr>
     <th style="text-align: right; font-weight: normal; width: 79%; border-top-color: rgb(17, 9, 9); ">MONTO TOTAL</th>
     <th style="text-align: right; font-weight: normal; width: 21%; border-top-color: rgb(17, 9, 9);"><?php echo e(number_format($total, 2, ',', '.')); ?></th>
-  </tr> 
+    </tr> 
+
 </table>
 <div style="color: black;font-size: 9pt; text-align: center;">Copia Contabilidad (Sin Derecho a Crédito Fiscal)</div>
 

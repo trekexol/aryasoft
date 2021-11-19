@@ -471,6 +471,7 @@ class PDF2Controller extends Controller
                                                                 ->get(); 
 
                 $total= 0;
+
                 $base_imponible= 0;
                 $price_cost_total= 0;
 
@@ -481,24 +482,40 @@ class PDF2Controller extends Controller
                 $total_retiene_islr = 0;
                 $retiene_islr = 0;
 
-                foreach($inventories_quotations as $var){
-                    //Se calcula restandole el porcentaje de descuento (discount)
-                    $percentage = (($var->price * $var->amount_quotation) * $var->discount)/100;
+                $price = 0;
+                
+                $date = Carbon::now();
+                $datenow = $date->format('Y-m-d');    
+                $anticipos_sum = 0;
+                if(isset($coin)){
+                    if($coin == 'bolivares'){
+                        $bcv = null;
+                    }else{
+                        $bcv = $quotation->bcv;
+                    }
+                }else{
+                    $bcv = null;
+                }
 
-                    $total += ($var->price * $var->amount_quotation) - $percentage;
+                foreach($inventories_quotations as $var){
+                    $price = bcdiv(($var->price / ($bcv ?? 1)), '1', 2);
+                    //Se calcula restandole el porcentaje de descuento (discount)
+                    $percentage = (($price * $var->amount_quotation) * $var->discount)/100;
+
+                    $total += ($price * $var->amount_quotation) - $percentage;
                     //----------------------------- 
 
                     if($var->retiene_iva_quotation == 0){
 
-                        $base_imponible += ($var->price * $var->amount_quotation) - $percentage; 
+                        $base_imponible += ($price * $var->amount_quotation) - $percentage; 
 
                     }else{
-                        $retiene_iva += ($var->price * $var->amount_quotation) - $percentage; 
+                        $retiene_iva += ($price * $var->amount_quotation) - $percentage; 
                     }
 
                     if($var->retiene_islr_quotation == 1){
 
-                        $retiene_islr += ($var->price * $var->amount_quotation) - $percentage; 
+                        $retiene_islr += ($price * $var->amount_quotation) - $percentage; 
 
                     }
 
@@ -518,18 +535,7 @@ class PDF2Controller extends Controller
                 //$quotation->base_imponible = $base_imponible;
 
                 
-                $date = Carbon::now();
-                $datenow = $date->format('Y-m-d');    
-                $anticipos_sum = 0;
-                if(isset($coin)){
-                    if($coin == 'bolivares'){
-                        $bcv = null;
-                    }else{
-                        $bcv = $quotation->bcv;
-                    }
-                }else{
-                    $bcv = null;
-                }
+               
 
 
                 /*Aqui revisamos el porcentaje de retencion de iva que tiene el cliente, para aplicarlo a productos que retengan iva */

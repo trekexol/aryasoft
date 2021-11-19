@@ -2228,7 +2228,7 @@ class ExpensesAndPurchaseController extends Controller
         
         $historial_expense = new HistorialExpenseController();
 
-        $historial_expense->registerAction($expense,"expense","Se actualizó la taza de: ".number_format($expense->rate, 2, '.', '')." a ".$rate);
+        $historial_expense->registerAction($expense,"expense","Se actualizó la taza de: ".number_format($expense->rate, 2, ',', '.')." a ".$rate);
         
         
         return redirect('/expensesandpurchases/register/'.$id_expense.'/'.$coin.'')->withSuccess('Actualizacion de Tasa Exitosa!');
@@ -2406,6 +2406,9 @@ class ExpensesAndPurchaseController extends Controller
             
             $var = ExpensesDetail::on(Auth::user()->database_name)->findOrFail($id);
 
+            $price_old = $var->price;
+            $amount_old = $var->amount;
+
             $coin = request('coin');
 
             $valor_sin_formato_price = str_replace(',', '.', str_replace('.', '', request('price')));
@@ -2442,7 +2445,8 @@ class ExpensesAndPurchaseController extends Controller
 
             $historial_expense = new HistorialExpenseController();
 
-            $historial_expense->registerAction($var,"expense_product","Se actualizó el Producto o Servicio: ".$var->description);
+            $historial_expense->registerAction($var,"expense_product","Actualizó el Producto: ".$var->inventories['code']."/ 
+            Precio Viejo: ".number_format($price_old, 2, ',', '.')." Cantidad: ".$amount_old."/ Precio Nuevo: ".number_format($var->price, 2, ',', '.')." Cantidad: ".$var->amount);
         
             return redirect('/expensesandpurchases/register/'.$var->id_expense.'/'.$coin.'')->withSuccess('Actualizacion Exitosa!');
         
