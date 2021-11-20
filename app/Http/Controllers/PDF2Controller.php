@@ -498,7 +498,18 @@ class PDF2Controller extends Controller
                 }
 
                 foreach($inventories_quotations as $var){
+
                     $price = bcdiv(($var->price / ($bcv ?? 1)), '1', 2);
+                    
+                    $precio_beta = substr($price,-2,2);
+
+                    if ($precio_beta >= 97) {
+                        $price = ceil($price);
+                      }
+                      if ($precio_beta < 3) {
+                        $price = floor($price);
+                      }
+
                     //Se calcula restandole el porcentaje de descuento (discount)
                     $percentage = (($price * $var->amount_quotation) * $var->discount)/100;
 

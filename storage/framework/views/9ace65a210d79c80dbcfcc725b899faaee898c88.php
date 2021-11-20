@@ -20,7 +20,7 @@
         <a class="nav-link font-weight-bold" style="color: black;" id="contact-tab"  href="<?php echo e(route('anticipos')); ?>" role="tab" aria-controls="contact" aria-selected="false">Anticipos Clientes</a>
     </li>
     <li class="nav-item" role="presentation">
-        <a class="nav-link font-weight-bold" style="color: black;" id="profile-tab"  href="<?php echo e(route('clients')); ?>" role="tab" aria-controls="profile" aria-selected="false">Clientes</a>
+        <a class="nav-link font-weight-bold" styl e="color: black;" id="profile-tab"  href="<?php echo e(route('clients')); ?>" role="tab" aria-controls="profile" aria-selected="false">Clientes</a>
     </li>
     <li class="nav-item" role="presentation">
         <a class="nav-link font-weight-bold" style="color: black;" id="contact-tab"  href="<?php echo e(route('vendors')); ?>" role="tab" aria-controls="contact" aria-selected="false">Vendedores</a>
@@ -75,6 +75,7 @@
                 <th class="text-center">REF</th>
                 <th class="text-center">Monto</th>
                 <th class="text-center">F.Cotización</th>
+                <th class="text-center">Moneda</th>
                 <th class="text-center"></th>
                 
                 
@@ -99,6 +100,7 @@
                             <td class="text-center">$<?php echo e(number_format($amount_bcv, 2, ',', '.') ?? 0); ?></td>
                             <td class="text-center"><?php echo e(number_format($quotation->amount_with_iva, 2, ',', '.') ?? 0); ?></td>
                             <td class="text-center"><?php echo e($quotation->date_quotation ?? ''); ?></td>
+                            <td class="text-center"><?php echo e($quotation->coin ?? ''); ?></td>
                             <td class="text-center">
                                 <a href="<?php echo e(route('quotations.create',[$quotation->id,$quotation->coin])); ?>" title="Seleccionar"><i class="fa fa-check"></i></a>
                                 <a href="<?php echo e(route('quotations.createdeliverynote',[$quotation->id,$quotation->coin])); ?>" title="Mostrar"><i class="fa fa-file-alt"></i></a>

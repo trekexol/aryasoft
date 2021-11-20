@@ -22,7 +22,7 @@
         <a class="nav-link font-weight-bold" style="color: black;" id="contact-tab"  href="{{ route('anticipos') }}" role="tab" aria-controls="contact" aria-selected="false">Anticipos Clientes</a>
     </li>
     <li class="nav-item" role="presentation">
-        <a class="nav-link font-weight-bold" style="color: black;" id="profile-tab"  href="{{ route('clients') }}" role="tab" aria-controls="profile" aria-selected="false">Clientes</a>
+        <a class="nav-link font-weight-bold" styl e="color: black;" id="profile-tab"  href="{{ route('clients') }}" role="tab" aria-controls="profile" aria-selected="false">Clientes</a>
     </li>
     <li class="nav-item" role="presentation">
         <a class="nav-link font-weight-bold" style="color: black;" id="contact-tab"  href="{{ route('vendors') }}" role="tab" aria-controls="contact" aria-selected="false">Vendedores</a>
@@ -76,6 +76,7 @@
                 <th class="text-center">REF</th>
                 <th class="text-center">Monto</th>
                 <th class="text-center">F.Cotización</th>
+                <th class="text-center">Moneda</th>
                 <th class="text-center"></th>
                 
                 
@@ -100,6 +101,7 @@
                             <td class="text-center">${{number_format($amount_bcv, 2, ',', '.') ?? 0}}</td>
                             <td class="text-center">{{number_format($quotation->amount_with_iva, 2, ',', '.') ?? 0}}</td>
                             <td class="text-center">{{ $quotation->date_quotation ?? ''}}</td>
+                            <td class="text-center">{{ $quotation->coin ?? ''}}</td>
                             <td class="text-center">
                                 <a href="{{ route('quotations.create',[$quotation->id,$quotation->coin])}}" title="Seleccionar"><i class="fa fa-check"></i></a>
                                 <a href="{{ route('quotations.createdeliverynote',[$quotation->id,$quotation->coin])}}" title="Mostrar"><i class="fa fa-file-alt"></i></a>

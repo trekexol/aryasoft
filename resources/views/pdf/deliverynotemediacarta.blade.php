@@ -111,6 +111,16 @@
   @foreach ($inventories_quotations as $var)
       <?php
       $price = bcdiv(($var->price / ($bcv ?? 1)), '1', 2);
+      
+      $precio_beta = substr($price,-2,2);
+
+      if ($precio_beta >= 97) {
+        $price = ceil($price);
+      }
+      if ($precio_beta < 3) {
+        $price = floor($price);
+      }
+         
       $percentage = (($price * $var->amount_quotation) * $var->discount)/100;
 
       $total_less_percentage = (number_format(bcdiv($price, '1', 2),2,'.','') * $var->amount_quotation) - $percentage;
@@ -257,6 +267,16 @@
   @foreach ($inventories_quotations as $var)
   <?php
       $price = bcdiv(($var->price / ($bcv ?? 1)), '1', 2);
+      
+      $precio_beta = substr($price,-2,2); 
+
+      if ($precio_beta >= 97) {
+        $price = ceil($price);
+      }
+      if ($precio_beta < 3) {
+        $price = floor($price);
+      }
+         
       $percentage = (($price * $var->amount_quotation) * $var->discount)/100;
 
       $total_less_percentage = (number_format(bcdiv($price, '1', 2),2,'.','') * $var->amount_quotation) - $percentage;
@@ -404,6 +424,16 @@
   @foreach ($inventories_quotations as $var)
   <?php
       $price = bcdiv(($var->price / ($bcv ?? 1)), '1', 2);
+
+      $precio_beta = substr($price,-2,2);
+
+      if ($precio_beta >= 97) {
+        $price = ceil($price);
+      }
+      if ($precio_beta < 3) {
+        $price = floor($price);
+}
+   
       $percentage = (($price * $var->amount_quotation) * $var->discount)/100;
 
       $total_less_percentage = (number_format(bcdiv($price, '1', 2),2,'.','') * $var->amount_quotation) - $percentage;
