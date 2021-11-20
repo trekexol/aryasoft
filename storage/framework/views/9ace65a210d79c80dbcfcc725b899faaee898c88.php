@@ -89,7 +89,7 @@
                     <?php $__currentLoopData = $quotations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $quotation): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <?php 
                     $amount_bcv = 0;
-                    $amount_bcv = $quotation->amount_with_iva / $quotation->bcv;
+                    $amount_bcv = $quotation->amount_with_iva;
                     ?>
                     
                       <tr>
